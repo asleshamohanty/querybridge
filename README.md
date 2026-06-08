@@ -62,23 +62,6 @@ Every query goes through 4 safety checks before execution:
 
 ---
 
-## Validation Results
-
-Measured across 50 test questions on the Olist dataset:
-
-| Metric | Result |
-|---|---|
-| Schema-valid SQL generation | 94% (47/50 questions) |
-| Non-SELECT query blocking | 100% |
-| Prompt injection blocking | 100% |
-| Median end-to-end latency | ~1.8s |
-| P95 latency | ~3.2s |
-| Questions answered (vs CANNOT_ANSWER) | 88% |
-
-The 6% schema-validation failures were questions about data genuinely absent from Olist — customer names (anonymised), email addresses, historical price changes. These correctly triggered the CANNOT_ANSWER path and returned a clean error rather than hallucinated SQL.
-
----
-
 ## Quickstart
 
 ### Prerequisites
