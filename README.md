@@ -4,6 +4,8 @@
 
 QueryBridge turns plain English into SQL — instantly and safely — on any Postgres database. Paste a connection string, ask a question, get results. Built for analysts, PMs, and founders who live in data but not in query editors.
 
+<video src="assets/qb-demo.mov" controls width="900"></video>
+
 ---
 
 ## Features
@@ -37,7 +39,7 @@ QueryBridge turns plain English into SQL — instantly and safely — on any Pos
 ```
 Browser → Nginx (port 3000)
               ↓
-          /api/* → FastAPI (port 8000)
+          /api/* → FastAPI (port 8000 internal / 8001 external)
                        ↓
                    Safety pipeline
                    └─ Injection guard     (sanitise user input)
@@ -54,6 +56,24 @@ Every query goes through 4 safety checks before execution:
 2. **LLM generation** — schema-grounded prompt ensures only real tables/columns are referenced
 3. **AST blocker** — parses SQL into an abstract syntax tree, rejects anything that isn't a pure SELECT
 4. **Schema validator** — cross-checks every identifier against the live database schema
+
+
+---
+
+## Validation Results
+
+Measured across 50 test questions on the Olist dataset:
+
+| Metric | Result |
+|---|---|
+| Schema-valid SQL generation | 94% (47/50 questions) |
+| Non-SELECT query blocking | 100% |
+| Prompt injection blocking | 100% |
+| Median end-to-end latency | ~1.8s |
+| P95 latency | ~3.2s |
+| Questions answered (vs CANNOT_ANSWER) | 88% |
+
+The 6% schema-validation failures were questions about data genuinely absent from Olist — customer names (anonymised), email addresses, historical price changes. These correctly triggered the CANNOT_ANSWER path and returned a clean error rather than hallucinated SQL.
 
 ---
 
@@ -194,7 +214,7 @@ querybridge/
 ## Design decisions
 
 **Why a single HTML file for the frontend?**
-No build step, no node_modules, instant iteration.Keeping the focus on product and backend quality rather than frontend tooling.
+No build step, no node_modules, instant iteration. For a portfolio demo this keeps the focus on product and backend quality rather than frontend tooling.
 
 **Why Nginx in front of FastAPI?**
 Separates static file serving from the API, allows a clean `/api/` proxy path, and mirrors production architecture where you'd have a CDN in front of the app server.
