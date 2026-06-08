@@ -4,7 +4,7 @@
 
 QueryBridge turns plain English into SQL — instantly and safely — on any Postgres database. Paste a connection string, ask a question, get results. Built for analysts, PMs, and founders who live in data but not in query editors.
 
-https://github.com/user-attachments/assets/0428139a-a484-4628-94be-26590c8c38f1
+[Watch the demo video](https://github.com/user-attachments/assets/0428139a-a484-4628-94be-26590c8c38f1)
 ---
 
 ## Features
