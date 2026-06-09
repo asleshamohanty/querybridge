@@ -15,7 +15,7 @@ Requirements:
   - docker compose up (all containers running)
   - pip install requests
 
-Runtime: ~8 minutes (8s pause between questions for Gemini free tier)
+Runtime: ~12 minutes (12s pause between questions for Gemini free tier)
 """
 
 import time
@@ -25,7 +25,7 @@ import requests
 
 API = "http://localhost:8001"
 CONN = "postgresql://qb_user:qb_pass@db:5432/olist"
-PAUSE = 8  # seconds between LLM calls — respects Gemini free tier (10 req/min)
+PAUSE = 12  # seconds between LLM calls — respects Gemini free tier (10 req/min)
 
 VALID_QUESTIONS = [
     "What are the top 5 cities by number of customers?",

@@ -7,7 +7,6 @@ QueryBridge turns plain English into SQL — instantly and safely — on any Pos
 <p align="center">
   <img src="assets/demo.gif" width="900"/>
 </p>
-
 ---
 
 ## Features
@@ -59,6 +58,12 @@ Every query goes through 4 safety checks before execution:
 3. **AST blocker** — parses SQL into an abstract syntax tree, rejects anything that isn't a pure SELECT
 4. **Schema validator** — cross-checks every identifier against the live database schema
 
+
+---
+
+## Validation
+
+Safety pipeline and SQL generation tested using `benchmark.py` — a 50-question automated test suite covering valid queries, unanswerable questions, and prompt injection attempts. Results to be added after full benchmark run.
 
 ---
 
@@ -163,6 +168,29 @@ Interactive docs at [http://localhost:8001/docs](http://localhost:8001/docs)
 
 ---
 
+## Future Plans
+
+### V2 — Accuracy & Explainability
+- **semantic_mapper.py** — translate business terms before the LLM sees them ("revenue" → `SUM(payment_value)`, "late" → `delivered_date > estimated_date`)
+- **explanation_gen.py** — after results return, a second LLM call writes a plain English summary ("São Paulo had 15,540 customers — 3x more than Rio de Janeiro")
+- **cost_estimator.py** — run `EXPLAIN ANALYZE` before execution, warn if query would scan >1M rows
+- **Read-only DB role** — `querybridge_ro` PostgreSQL user with SELECT-only permissions, enforced at the database level independent of application safety checks
+
+### V3 — Multi-turn Conversations
+- **conversation.py** — store last 5 question/answer turns per session so users can ask natural follow-ups
+- Example: "which cities have the most orders?" → "now show only 2018" → "filter to São Paulo" — each turn uses previous context
+- Session keyed to connection string — different databases keep separate conversation histories
+- Last N turns injected into the LLM prompt automatically, no user action needed
+- Graceful context truncation when history gets too long (sliding window over turns)
+
+### V4 — Charts & Visualisations
+- **result_formatter.py** — detect chart type automatically from result shape: 2 columns with a numeric = bar chart, date + numeric = line chart, category + percentage = pie chart
+- **Recharts** (React) — render the chart inline above the results table, no extra libraries
+- Chart type overrideable by the user — toggle between table / bar / line / pie
+- Export results as CSV with one click
+- Upgrade frontend from vanilla HTML to React + Tailwind for component reuse
+
+---
 ## Project structure
 
 ```
